@@ -1,0 +1,16 @@
+flowchart TB
+  subgraph AWS[AWS Account]
+    s3[S3 Bucket\nterraform state]
+    ddb[DynamoDB\nLock Table]
+    subgraph VPC[VPC 10.0.0.0/16]
+      pub[Public Subnet\n10.0.1.0/24]
+      igw[Internet Gateway]
+      rt[Route Table\n0.0.0.0/0 -> IGW]
+      pub --> rt
+      rt --> igw
+    end
+  end
+
+  tf[Terraform CLI] --> s3
+  tf --> ddb
+  tf --> VPC
